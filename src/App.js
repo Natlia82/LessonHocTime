@@ -1,16 +1,57 @@
 import React, {useState} from 'react';
 
+
+function DateTimePretty(Component) {
+    
+    return function (props) {
+        console.log(props);
+        const dateStr = props.date;
+        var diff = Math.abs(new Date() - new Date(dateStr.replace(/-/g,'/')));
+        
+        const years = Math.floor(diff/(1000 * 60 * 60 * 24 * 30 * 12));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30) % 12);
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24) % 30);
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        console.log(years + " " + months + " ")
+        if (years > 0) {
+           var str = years + " лет назад";
+         } else if (months > 0) {
+            str = months + " месяцев назад";
+         } else if (days > 0) {
+            str = days + " дней назад";
+         } else if (hours > 0) {
+            str = hours + " часов назад";
+         } else if (minutes > 0) {
+            str = minutes + " минут назад";
+         } else if (seconds > 0) {
+            str = seconds + " секунд назад";
+         }
+        
+
+       
+        const date = {date: str};
+        console.log(date)
+        return Component(date);
+    }
+}
+
+const LoggerComponent = DateTimePretty(DateTime)
+
 function DateTime(props) {
+    console.log(props)
     return (
         <p className="date">{props.date}</p>
     )
 }
 
 function Video(props) {
+  
     return (
         <div className="video">
             <iframe src={props.url} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <DateTime date={props.date} />
+            <LoggerComponent date={props.date} />
         </div>
     )
 }
